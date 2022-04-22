@@ -13,13 +13,27 @@
     "serialization",
     "typescript"
   ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "build": "gulp --gulpfile scripts/gulpfile.js",
     "build:types": "node cli/bin/pbts --main --global protobuf --out index.d.ts src/ "
   },
   "dependencies": {
+    "@protobufjs/aspromise": "^1.1.2",
+    "@protobufjs/base64": "^1.1.2",
+    "@protobufjs/codegen": "^2.0.4",
+    "@protobufjs/eventemitter": "^1.1.0",
+    "@protobufjs/fetch": "^1.1.0",
+    "@protobufjs/float": "^1.0.2",
+    "@protobufjs/inquire": "^1.1.0",
+    "@protobufjs/path": "^1.1.2",
+    "@protobufjs/pool": "^1.1.0",
+    "@protobufjs/utf8": "^1.1.0",
+    "@types/long": "^4.0.1",
+    "@types/node": ">=13.7.0",
+    "long": "^4.0.0",
+    "tmp": "^0.2.1"
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
@@ -54,10 +68,10 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "files": [
-    "dist/index.d.ts",
-    "dist/index.js",
-    "dist/index.js.map",
-    "dist/index.min.js",
-    "dist/index.min.js.map"
+    "index.js",
+    "index.d.ts",
+    "tsconfig.json",
+    "dist/**",
+    "src/**"
   ]
 }
