@@ -5,7 +5,7 @@ module.exports = BufferReader;
 var Reader = require("./reader");
 (BufferReader.prototype = Object.create(Reader.prototype)).constructor = BufferReader;
 
-var util = require("./util/minimal");
+var util = require("./util/core");
 
 /**
  * Constructs a new buffer reader instance.

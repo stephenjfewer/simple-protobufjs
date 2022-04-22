@@ -5,7 +5,7 @@ module.exports = BufferWriter;
 var Writer = require("./writer");
 (BufferWriter.prototype = Object.create(Writer.prototype)).constructor = BufferWriter;
 
-var util = require("./util/minimal");
+var util = require("./util/core");
 
 /**
  * Constructs a new buffer writer instance.

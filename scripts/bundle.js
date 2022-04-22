@@ -20,10 +20,12 @@ var pkg = require(path.join(__dirname, "..", "package.json"));
 /*eslint-disable no-template-curly-in-string*/
 var license = [
     "/*!",
-    " * protobuf.js v${version} (c) 2016, daniel wirtz",
+    " * simple-protobuf.js v${version} (c) 2022, stephen j. fewer",
     " * compiled ${date}",
+    " * see: https://github.com/stephenjfewer/simple-protobufjs for details",
+    " * forked from protobuf.js (c) 2016, daniel wirtz",
     " * licensed under the bsd-3-clause license",
-    " * see: https://github.com/dcodeio/protobuf.js for details",
+    " * see: https://github.com/protobufjs/protobuf.js for details",
     " */"
 ].join("\n") + "\n";
 /*eslint-enable no-template-curly-in-string*/
@@ -61,7 +63,7 @@ function bundle(options) {
     })
     .plugin(require("bundle-collapser/plugin"))
     .bundle()
-    .pipe(source(options.compress ? "protobuf.min.js" : "protobuf.js"))
+    .pipe(source(options.compress ? "simple-protobuf.min.js" : "simple-protobuf.js"))
     .pipe(buffer())
     .pipe(sourcemaps.init({ loadMaps: true }))
             .pipe(

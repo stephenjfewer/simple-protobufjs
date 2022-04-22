@@ -1,7 +1,14 @@
 "use strict";
 module.exports = LongBits;
 
-var util = require("../util/minimal");
+var util = require("./core");
+
+/**
+ * Long.js's Long class if available.
+ * @type {Constructor<Long>}
+ */
+ LongBits.Long = util.inquire("long");
+
 
 /**
  * Constructs new long bits.
@@ -82,8 +89,8 @@ LongBits.from = function from(value) {
         return LongBits.fromNumber(value);
     if (util.isString(value)) {
         /* istanbul ignore else */
-        if (util.Long)
-            value = util.Long.fromString(value);
+        if (util.LongLongBits.Long)
+            value = util.LongLongBits.Long.fromString(value);
         else
             return LongBits.fromNumber(parseInt(value, 10));
     }
@@ -112,8 +119,8 @@ LongBits.prototype.toNumber = function toNumber(unsigned) {
  * @returns {Long} Long
  */
 LongBits.prototype.toLong = function toLong(unsigned) {
-    return util.Long
-        ? new util.Long(this.lo | 0, this.hi | 0, Boolean(unsigned))
+    return util.LongLongBits.Long
+        ? new util.LongLongBits.Long(this.lo | 0, this.hi | 0, Boolean(unsigned))
         /* istanbul ignore next */
         : { low: this.lo | 0, high: this.hi | 0, unsigned: Boolean(unsigned) };
 };

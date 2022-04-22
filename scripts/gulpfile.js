@@ -17,14 +17,10 @@ function defineTask(name, entry, target) {
     ), function(done) { done(); });
 }
 
-defineTask("full"   , "../src/index"        , "../dist"        );
-defineTask("light"  , "../src/index-light"  , "../dist/light"  );
-defineTask("minimal", "../src/index-minimal", "../dist/minimal");
+defineTask("simple"   , "../src/index"        , "../dist"        );
 
 gulp.task("default", gulp.parallel(
-    "full",
-    "light",
-    "minimal"
+    "simple"
 , function(done) { done(); }));
 
 /* var typedoc = require("gulp-typedoc");

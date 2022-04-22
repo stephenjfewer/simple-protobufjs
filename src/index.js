@@ -1,12 +1,35 @@
 "use strict";
-var protobuf = module.exports = require("./index-light");
+var protobuf = exports;
 
-protobuf.build = "full";
+/**
+ * Build type
+ * @name build
+ * @type {string}
+ * @const
+ */
+protobuf.build = "simple";
 
-// Parser
-protobuf.tokenize         = require("./tokenize");
-protobuf.parse            = require("./parse");
-protobuf.common           = require("./common");
+// Serialization
+protobuf.Writer       = require("./writer");
+protobuf.BufferWriter = require("./writer_buffer");
+protobuf.Reader       = require("./reader");
+protobuf.BufferReader = require("./reader_buffer");
 
-// Configure parser
-protobuf.Root._configure(protobuf.Type, protobuf.parse, protobuf.common);
+// Utility
+protobuf.util         = require("./util/core");
+protobuf.roots        = require("./roots");
+protobuf.configure    = configure;
+
+/* istanbul ignore next */
+/**
+ * Reconfigures the library according to the environment.
+ * @returns {undefined}
+ */
+function configure() {
+    protobuf.util._configure();
+    protobuf.Writer._configure(protobuf.BufferWriter);
+    protobuf.Reader._configure(protobuf.BufferReader);
+}
+
+// Set up buffer utility according to the environment
+configure();
