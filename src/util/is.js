@@ -1,4 +1,4 @@
-
+var is = {};
 
 module.exports = is;
 /**

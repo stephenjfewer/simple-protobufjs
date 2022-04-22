@@ -7,7 +7,7 @@ var is = require("./is");
  * Long.js's Long class if available.
  * @type {Constructor<Long>}
  */
- LongBits.Long = require("@protobufjs/inquire").inquire('long');
+ LongBits.Long = require('long');
 
 
 /**
