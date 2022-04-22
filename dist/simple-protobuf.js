@@ -1,6 +1,6 @@
 /*!
  * simple-protobuf.js v22.4.22 (c) 2022, stephen j. fewer
- * compiled fri, 22 apr 2022 23:06:57 utc
+ * compiled fri, 22 apr 2022 23:19:12 utc
  * see: https://github.com/stephenjfewer/simple-protobufjs for details
  * forked from protobuf.js (c) 2016, daniel wirtz
  * licensed under the bsd-3-clause license
@@ -706,8 +706,8 @@ var protobuf = exports;
 protobuf.build = "simple";
 
 // Serialization
-protobuf.Writer       = require(12);
-protobuf.BufferWriter = require(13);
+protobuf.Writer       = require(13);
+protobuf.BufferWriter = require(14);
 protobuf.Reader       = require(7);
 protobuf.BufferReader = require(8);
 
@@ -730,7 +730,7 @@ function configure() {
 // Set up buffer utility according to the environment
 configure();
 
-},{"10":10,"12":12,"13":13,"7":7,"8":8,"9":9}],7:[function(require,module,exports){
+},{"10":10,"13":13,"14":14,"7":7,"8":8,"9":9}],7:[function(require,module,exports){
 "use strict";
 module.exports = Reader;
 
@@ -1221,25 +1221,16 @@ util.utf8 = require(5);
 util.pool = require(4);
 
 // utility to work with the low and high bits of a 64 bit value
-util.LongBits = require(11);
+util.LongBits = require(12);
 
-/**
- * Whether running within node or not.
- * @memberof util
- * @type {boolean}
- */
-util.isNode = Boolean(typeof global !== "undefined"
-    && global
-    && global.process
-    && global.process.versions
-    && global.process.versions.node);
+util.is = require(11);
 
 /**
 * Global object reference.
 * @memberof util
 * @type {Object}
 */
-util.global = util.isNode && global
+util.global = util.is.Node && global
     || typeof window !== "undefined" && window
     || typeof self !== "undefined" && self
     || this; // eslint-disable-line no-invalid-this
@@ -1258,57 +1249,6 @@ util.emptyArray = Object.freeze ? Object.freeze([]) : /* istanbul ignore next */
  * @const
  */
 util.emptyObject = Object.freeze ? Object.freeze({}) : /* istanbul ignore next */ {}; // used on prototypes
-
-/**
- * Tests if the specified value is an integer.
- * @function
- * @param {*} value Value to test
- * @returns {boolean} `true` if the value is an integer
- */
-util.isInteger = Number.isInteger || /* istanbul ignore next */ function isInteger(value) {
-    return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
-};
-
-/**
- * Tests if the specified value is a string.
- * @param {*} value Value to test
- * @returns {boolean} `true` if the value is a string
- */
-util.isString = function isString(value) {
-    return typeof value === "string" || value instanceof String;
-};
-
-/**
- * Tests if the specified value is a non-null object.
- * @param {*} value Value to test
- * @returns {boolean} `true` if the value is a non-null object
- */
-util.isObject = function isObject(value) {
-    return value && typeof value === "object";
-};
-
-/**
- * Checks if a property on a message is considered to be present.
- * This is an alias of {@link util.isSet}.
- * @function
- * @param {Object} obj Plain object or message instance
- * @param {string} prop Property name
- * @returns {boolean} `true` if considered to be present, otherwise `false`
- */
-util.isset =
-
-    /**
-     * Checks if a property on a message is considered to be present.
-     * @param {Object} obj Plain object or message instance
-     * @param {string} prop Property name
-     * @returns {boolean} `true` if considered to be present, otherwise `false`
-     */
-    util.isSet = function isSet(obj, prop) {
-        var value = obj[prop];
-        if (value != null && obj.hasOwnProperty(prop)) // eslint-disable-line eqeqeq, no-prototype-builtins
-            return typeof value !== "object" || (Array.isArray(value) ? value.length : Object.keys(value).length) > 0;
-        return false;
-    };
 
 /**
  * Any compatible Buffer instance.
@@ -1411,7 +1351,7 @@ util.longToHash = function longToHash(value) {
  */
 util.longFromHash = function longFromHash(hash, unsigned) {
     var bits = util.LongBits.fromHash(hash);
-    if (util.LongLongBits.Long)
+    if (util.LongBits.Long)
         return util.LongBits.Long.fromBits(bits.lo, bits.hi, unsigned);
     return bits.toNumber(Boolean(unsigned));
 };
@@ -1610,17 +1550,84 @@ util._configure = function () {
         };
 };
 
-},{"1":1,"11":11,"2":2,"3":3,"4":4,"5":5}],11:[function(require,module,exports){
+},{"1":1,"11":11,"12":12,"2":2,"3":3,"4":4,"5":5}],11:[function(require,module,exports){
+
+
+module.exports = is;
+/**
+ * Whether running within node or not.
+ * @memberof util
+ * @type {boolean}
+ */
+ is.Node = Boolean(typeof global !== "undefined"
+ && global
+ && global.process
+ && global.process.versions
+ && global.process.versions.node);
+
+
+/**
+ * Tests if the specified value is an integer.
+ * @function
+ * @param {*} value Value to test
+ * @returns {boolean} `true` if the value is an integer
+ */
+is.Integer = Number.isInteger || /* istanbul ignore next */ function isInteger(value) {
+    return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
+};
+
+/**
+ * Tests if the specified value is a string.
+ * @param {*} value Value to test
+ * @returns {boolean} `true` if the value is a string
+ */
+is.String = function isString(value) {
+    return typeof value === "string" || value instanceof String;
+};
+
+/**
+ * Tests if the specified value is a non-null object.
+ * @param {*} value Value to test
+ * @returns {boolean} `true` if the value is a non-null object
+ */
+is.Object = function isObject(value) {
+    return value && typeof value === "object";
+};
+
+/**
+ * Checks if a property on a message is considered to be present.
+ * This is an alias of {@link is.Set}.
+ * @function
+ * @param {Object} obj Plain object or message instance
+ * @param {string} prop Property name
+ * @returns {boolean} `true` if considered to be present, otherwise `false`
+ */
+is.set =
+
+/**
+ * Checks if a property on a message is considered to be present.
+ * @param {Object} obj Plain object or message instance
+ * @param {string} prop Property name
+ * @returns {boolean} `true` if considered to be present, otherwise `false`
+ */
+is.Set = function isSet(obj, prop) {
+    var value = obj[prop];
+    if (value != null && obj.hasOwnProperty(prop)) // eslint-disable-line eqeqeq, no-prototype-builtins
+        return typeof value !== "object" || (Array.isArray(value) ? value.length : Object.keys(value).length) > 0;
+    return false;
+};
+
+},{}],12:[function(require,module,exports){
 "use strict";
 module.exports = LongBits;
 
-var util = require(10);
+var is = require(11);
 
 /**
  * Long.js's Long class if available.
  * @type {Constructor<Long>}
  */
- LongBits.Long = util.inquire("long");
+ LongBits.Long = require(3).inquire('long');
 
 
 /**
@@ -1700,10 +1707,10 @@ LongBits.fromNumber = function fromNumber(value) {
 LongBits.from = function from(value) {
     if (typeof value === "number")
         return LongBits.fromNumber(value);
-    if (util.isString(value)) {
+    if (is.string(value)) {
         /* istanbul ignore else */
-        if (util.LongLongBits.Long)
-            value = util.LongLongBits.Long.fromString(value);
+        if (LongBits.Long)
+            value = LongBits.Long.fromString(value);
         else
             return LongBits.fromNumber(parseInt(value, 10));
     }
@@ -1819,7 +1826,7 @@ LongBits.prototype.length = function length() {
          : part2 < 128 ? 9 : 10;
 };
 
-},{"10":10}],12:[function(require,module,exports){
+},{"11":11,"3":3}],13:[function(require,module,exports){
 "use strict";
 module.exports = Writer;
 
@@ -2197,7 +2204,7 @@ Writer.prototype.bytes = function write_bytes(value) {
     var len = value.length >>> 0;
     if (!len)
         return this._push(writeByte, 1, 0);
-    if (util.isString(value)) {
+    if (util.is.string(value)) {
         var buf = Writer.alloc(len = base64.length(value));
         base64.decode(value, buf, 0);
         value = buf;
@@ -2286,12 +2293,12 @@ Writer._configure = function(BufferWriter_) {
     BufferWriter._configure();
 };
 
-},{"10":10}],13:[function(require,module,exports){
+},{"10":10}],14:[function(require,module,exports){
 "use strict";
 module.exports = BufferWriter;
 
 // extends Writer
-var Writer = require(12);
+var Writer = require(13);
 (BufferWriter.prototype = Object.create(Writer.prototype)).constructor = BufferWriter;
 
 var util = require(10);
@@ -2334,7 +2341,7 @@ BufferWriter._configure = function () {
  * @override
  */
 BufferWriter.prototype.bytes = function write_bytes_buffer(value) {
-    if (util.isString(value))
+    if (util.is.string(value))
         value = util._Buffer_from(value, "base64");
     var len = value.length >>> 0;
     this.uint32(len);
@@ -2373,7 +2380,7 @@ BufferWriter.prototype.string = function write_string_buffer(value) {
 
 BufferWriter._configure();
 
-},{"10":10,"12":12}]},{},[6])
+},{"10":10,"13":13}]},{},[6])
 
 })();
 //# sourceMappingURL=simple-protobuf.js.map

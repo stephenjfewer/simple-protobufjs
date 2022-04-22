@@ -375,7 +375,7 @@ Writer.prototype.bytes = function write_bytes(value) {
     var len = value.length >>> 0;
     if (!len)
         return this._push(writeByte, 1, 0);
-    if (util.isString(value)) {
+    if (util.is.string(value)) {
         var buf = Writer.alloc(len = base64.length(value));
         base64.decode(value, buf, 0);
         value = buf;

@@ -45,7 +45,7 @@ BufferWriter._configure = function () {
  * @override
  */
 BufferWriter.prototype.bytes = function write_bytes_buffer(value) {
-    if (util.isString(value))
+    if (util.is.string(value))
         value = util._Buffer_from(value, "base64");
     var len = value.length >>> 0;
     this.uint32(len);

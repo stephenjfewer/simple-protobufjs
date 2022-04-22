@@ -1,13 +1,13 @@
 "use strict";
 module.exports = LongBits;
 
-var util = require("./core");
+var is = require("./is");
 
 /**
  * Long.js's Long class if available.
  * @type {Constructor<Long>}
  */
- LongBits.Long = util.inquire("long");
+ LongBits.Long = require("@protobufjs/inquire").inquire('long');
 
 
 /**
@@ -87,10 +87,10 @@ LongBits.fromNumber = function fromNumber(value) {
 LongBits.from = function from(value) {
     if (typeof value === "number")
         return LongBits.fromNumber(value);
-    if (util.isString(value)) {
+    if (is.string(value)) {
         /* istanbul ignore else */
-        if (util.LongLongBits.Long)
-            value = util.LongLongBits.Long.fromString(value);
+        if (LongBits.Long)
+            value = LongBits.Long.fromString(value);
         else
             return LongBits.fromNumber(parseInt(value, 10));
     }

@@ -19,23 +19,14 @@ util.pool = require("@protobufjs/pool");
 // utility to work with the low and high bits of a 64 bit value
 util.LongBits = require("./longbits");
 
-/**
- * Whether running within node or not.
- * @memberof util
- * @type {boolean}
- */
-util.isNode = Boolean(typeof global !== "undefined"
-    && global
-    && global.process
-    && global.process.versions
-    && global.process.versions.node);
+util.is = require("./is");
 
 /**
 * Global object reference.
 * @memberof util
 * @type {Object}
 */
-util.global = util.isNode && global
+util.global = util.is.Node && global
     || typeof window !== "undefined" && window
     || typeof self !== "undefined" && self
     || this; // eslint-disable-line no-invalid-this
@@ -54,57 +45,6 @@ util.emptyArray = Object.freeze ? Object.freeze([]) : /* istanbul ignore next */
  * @const
  */
 util.emptyObject = Object.freeze ? Object.freeze({}) : /* istanbul ignore next */ {}; // used on prototypes
-
-/**
- * Tests if the specified value is an integer.
- * @function
- * @param {*} value Value to test
- * @returns {boolean} `true` if the value is an integer
- */
-util.isInteger = Number.isInteger || /* istanbul ignore next */ function isInteger(value) {
-    return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
-};
-
-/**
- * Tests if the specified value is a string.
- * @param {*} value Value to test
- * @returns {boolean} `true` if the value is a string
- */
-util.isString = function isString(value) {
-    return typeof value === "string" || value instanceof String;
-};
-
-/**
- * Tests if the specified value is a non-null object.
- * @param {*} value Value to test
- * @returns {boolean} `true` if the value is a non-null object
- */
-util.isObject = function isObject(value) {
-    return value && typeof value === "object";
-};
-
-/**
- * Checks if a property on a message is considered to be present.
- * This is an alias of {@link util.isSet}.
- * @function
- * @param {Object} obj Plain object or message instance
- * @param {string} prop Property name
- * @returns {boolean} `true` if considered to be present, otherwise `false`
- */
-util.isset =
-
-    /**
-     * Checks if a property on a message is considered to be present.
-     * @param {Object} obj Plain object or message instance
-     * @param {string} prop Property name
-     * @returns {boolean} `true` if considered to be present, otherwise `false`
-     */
-    util.isSet = function isSet(obj, prop) {
-        var value = obj[prop];
-        if (value != null && obj.hasOwnProperty(prop)) // eslint-disable-line eqeqeq, no-prototype-builtins
-            return typeof value !== "object" || (Array.isArray(value) ? value.length : Object.keys(value).length) > 0;
-        return false;
-    };
 
 /**
  * Any compatible Buffer instance.
@@ -207,7 +147,7 @@ util.longToHash = function longToHash(value) {
  */
 util.longFromHash = function longFromHash(hash, unsigned) {
     var bits = util.LongBits.fromHash(hash);
-    if (util.LongLongBits.Long)
+    if (util.LongBits.Long)
         return util.LongBits.Long.fromBits(bits.lo, bits.hi, unsigned);
     return bits.toNumber(Boolean(unsigned));
 };
